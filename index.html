@@ -11,12 +11,50 @@
 	</head>
 
 	<body>	
-		<div id="Content">
-			<div id="divLeft">
+		<!--<div id="Content">-->
+			<div id="divLeft" class="background">
+			<div class="right">
+				<div id="jugador-arquero" class="jugador">
+					<img id="player1"></img>
+				</div>
+				<div id="jugador-def-der" class="jugador">
+					<img></img>
+				</div>
+				<div id="jugador-def-izq" class="jugador">
+					<img></img>
+				</div>
 			</div>
-			<div id="divRight">
+			<div class="left">
+				<div id="jugador-del-der" class="jugador">
+					<img></img>
+				</div>
+				<div id="jugador-del-izq" class="jugador">
+					<img></img>
+				</div>
 			</div>
-		</div>				
+		</div>
+		<div id="divRight" class="background">
+			<div class="left">
+				<div id="jugador-def-der" class="jugador">
+					<img></img>
+				</div>
+				<div id="jugador-def-izq" class="jugador">
+					<img></img>
+				</div>
+				<div id="jugador-arquero" class="jugador">
+					<img></img>
+				</div>
+			</div>
+			<div class="right">
+				<div id="jugador-del-der" class="jugador">
+					<img></img>
+				</div>
+				<div id="jugador-del-izq" class="jugador">
+					<img></img>
+				</div>
+			</div>
+		</div>
+		<!--</div>-->
 		<div id="popupNew">
 			<div id="closePopup">X</div>
 			<form action="#" id="formAdd">
@@ -43,11 +81,28 @@
 	<script type="text/javascript" src="js/map.js"></script>		
 	<script type="text/javascript" src="js/jquery-1.5.0.js"></script>
 	<script type="text/javascript" src="js/jquery.validate.js"></script>	
+	<script type="text/javascript" src="js/animate.js"></script>	
+	<script type="text/javascript" src="js/player.js"></script>	
+	<!--<script type="text/javascript" src="js/jquery.ui.datepicker.js"></script>
+	<script type="text/javascript" src="js/dialog.js"></script>-->
+	
 	<script type="text/javascript">		
 		codeAddress('11 de abril 350, Bahía Blanca, Argentina', 'Azia Futbol, 11 de abril 350');
 		$(document).ready(function(){	
 			var playerId = 10;			
-		
+			
+			//Silvana K. seteo las imagenes en posicionees libres.
+			$("#divLeft div img").attr('src', './CSS/images/flecha_azul.png');
+			$("#divRight div img").attr('src', './CSS/images/flecha_roja.png');
+			
+			//Silvana K. Para cada elemento Jugador le asigno el data.
+			$.each($(".jugador").find("img"), function(){
+				var objData = {	"mouseover": true, 
+								"libre": true, 
+								"urlImg" : $(this).attr('src') };
+				$(this).data(objData);
+			});
+			
 			//Set dimension popup
 			$("#popupNew").css('width', 300 + 'px');
 			$("#popupNew").css('height', 180 + 'px');
@@ -133,6 +188,7 @@
 										return false;						
 								}
 			});			
+			
 			//Clear all form.
 			jQuery.fn.reset = function (){
 				$(this).each (function(){ (this).reset(); });
@@ -154,10 +210,29 @@
 				if (playerId == 0)
 				{
 					ShowPopupNew();
+					//Luego de completar el submit debo modificar la imagen.
+					//changeStateImage($(this).find("img"));
 				}
 				else ShowPopupDelete();
 			});
 			
+			//Silvana K. Animacion 
+			$(".jugador").bind("mouseenter", function(){
+				//obtengo el objeto sobre el cual estoy haciendo el hover.
+				var child = $(this).find("img");
+					
+				//Modifico la propiedad del mouseover.
+				child.data("mouseover", true);
+					
+				//Inicio la animacion.
+				animatePlayer(child);
+			});
+								
+			$(".jugador").bind("mouseout" , function(){
+				//Modifico la propiedad del mouseover.
+				$(this).find("img").data("mouseover", false);
+			});
+				
 			//Hide popup and reset form.
 			function Hide(){				
 				$("#popupNew").fadeOut('slow');				
