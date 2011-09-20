@@ -1,0 +1,25 @@
+#popup, #popupDelete { 
+   z-index:2; 
+   position:absolute; 
+   border: 1px solid #333333; 
+   text-align:center; 
+   background:#000000; 
+} 
+#closePopup, #closePopupDelete{ 
+   float:right; 
+   margin-right:5px; 
+   cursor:pointer; 
+   font:Verdana, Arial, Helvetica, sans-serif; 
+   font-size:12px; 
+   font-weight:bold; 
+   color:#FFFFFF; 
+   background-color:#666666; 
+   width:12px; 
+   position:relative; 
+   margin-top:-1px; 
+   text-align:center; 
+}
+
+label {
+	color: wheat;
+}

@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 4.01 Transitional//EN" >
+
+<html>
+	<head>		
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />	
+
+		<link type="text/css" href="css/football.css" rel="stylesheet" />		
+		<link type="text/css" href="css/jquery-ui-1.7.2.custom.css" rel="stylesheet" />		
+		<link type="text/css" href="css/popup.css" rel="stylesheet" />				
+		<link type="text/css" href="css/style.css" rel="stylesheet" />				
+	</head>
+
+	<body>	
+		<div id="Content">
+			<div id="divLeft">
+			</div>
+			<div id="divRight">
+			</div>
+		</div>				
+		<div id="popupNew">
+			<div id="closePopup">X</div>
+			<form action="#" id="formAdd">
+				<p><label>Name: </label><input type="text" name="txtName" id="txtName" /></p>
+				<p><label>Pass: </label><input type="text" name="txtPass" id="txtPass" /></p>
+				<p><label>Confirm: </label><input type="text" name="txtConfirm" id="txtConfirm" /></p>
+				<p><input type="submit" value="Submit" id="btnSubmit"/>
+			</form>
+		</div>
+		<div id="popupDelete">
+			<div id="closePopupDelete">X</div>
+			<form action="#" id="formDelete">
+				<p><label>Pass: </label><input type="text" name="txtPassDelete" id="txtPassDelete" /></p>
+				<p><input type="submit" value="Submit" id="btnDelete"/></p>
+			</form>
+		</div>
+		<div id="mapa">		
+		</div>
+	</body>
+	
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=geometry&amp;sensor=false"></script>
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&amp;sensor=false"></script>
+	<script type="text/javascript" src="js/map.js"></script>		
+	<script type="text/javascript" src="js/jquery-1.5.0.js"></script>
+	<script type="text/javascript" src="js/jquery.validate.js"></script>	
+	<script type="text/javascript">		
+		codeAddress('11 de abril 350, Bahía Blanca, Argentina', 'Azia Futbol, 11 de abril 350');
+		$(document).ready(function(){	
+			var playerId = 10;			
+		
+			//Set dimension popup
+			$("#popupNew").css('width', 300 + 'px');
+			$("#popupNew").css('height', 180 + 'px');
+			$("#popupNew").hide();
+			$("#popupDelete").css('width', 250 + 'px');
+			$("#popupDelete").css('height', 100 + 'px');
+			$("#popupDelete").hide();
+			
+			//Get values of browser
+			var width = $(this).width();
+			var height = $(this).height();
+			
+			//Center popup
+			var img_width = 400 + 10; 
+			var img_height = 450 + 28; 
+			width = (width/2) - (img_width/2); 
+			height = (height/2) - (img_height/2); 
+			$("#popupNew").css("left",width + "px"); 
+			$("#popupNew").css("top",height + "px");
+			$("#popupDelete").css("left",width + "px"); 
+			$("#popupDelete").css("top",height + "px");
+												
+			//Validate and add player to game.
+			var validate = $('#formAdd').validate({
+								rules:{
+									txtName:{ 
+											required:true,
+											remote:"getUser.php"
+									},
+									txtPass:{ 
+											required:true
+									},
+									txtConfirm:{ 
+											equalTo:txtPass
+									}
+								},
+								messages:{
+									txtName:{
+										remote:"The user already exists"
+									}
+								},
+								//Call ddbb, paint on map and add in image.
+								submitHandler: function(){						
+										$.ajax({
+											url:"usuario.php",
+											type: "POST",
+											data: $("#formAdd").serialize(),											
+											success: function(data){
+												changeStateImage(playerId);
+											},
+											error: function(){
+												alert("Error estamos al horno!!!");
+											}
+										})
+										validate.resetForm();
+										Hide();
+										return false;						
+								}
+			});	
+			
+			//Validate and delete player to the game.
+			var validate = $('#formDelete').validate({
+								rules:{									
+									txtPassDelete:{ 
+											required:true
+									}									
+								},
+								//Call ddbb, paint on map and changed image.
+								submitHandler: function(){						
+										$.ajax({
+											url:"deletePlayer.php",
+											type: "POST",
+											data: "pass" + $("#txtPassDelete").val(),
+											success: function(data){
+												changeStateImage(playerId);
+											},
+											error: function(){
+												alert("Unknown Username or Password");
+											}
+										})
+										validate.resetForm();
+										HidePopupDelete();
+										return false;						
+								}
+			});			
+			//Clear all form.
+			jQuery.fn.reset = function (){
+				$(this).each (function(){ (this).reset(); });
+			}
+			//Close popup and clean validate.
+			$("#closePopup").bind("click", function(){
+				validate.resetForm();
+				Hide();
+				return false;
+			});						
+			$("#closePopupDelete").bind("click", function(){
+				validate.resetForm();
+				HidePopupDelete();
+				return false;
+			})
+								
+			$("#divLeft").bind("click", function(){
+				//validate is player empty
+				if (playerId == 0)
+				{
+					ShowPopupNew();
+				}
+				else ShowPopupDelete();
+			});
+			
+			//Hide popup and reset form.
+			function Hide(){				
+				$("#popupNew").fadeOut('slow');				
+				$("#formAdd").reset();
+			};
+			function HidePopupDelete(){
+				$("#popupDelete").fadeOut('slow');
+				$("#formDelete").reset();
+			}
+			
+			//Shows popups.
+			function ShowPopupNew(){				
+				$("#popupNew").fadeIn('slow');				
+			}
+			function ShowPopupDelete(){										
+				$("#popupDelete").fadeIn('slow');		
+			}
+		});
+	</script>
+</html>
