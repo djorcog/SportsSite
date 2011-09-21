@@ -11,51 +11,40 @@
 	</head>
 
 	<body>	
-		<!--<div id="Content">-->
-			<title>HOLAAAAA</title>
-			<div id="divLeft" class="background">
-			<div class="right">
-				<div id="jugador-arquero" class="jugador">
-					<img id="player1"></img>
-				</div>
-				<div id="jugador-def-der" class="jugador">
-					<img></img>
-				</div>
-				<div id="jugador-def-izq" class="jugador">
-					<img></img>
-				</div>
+		<div id="divLeft" class="background">
+			<div id="jugador-arquero" class="jugador">
+				<img id="player-1"></img>
 			</div>
-			<div class="left">
-				<div id="jugador-del-der" class="jugador">
-					<img></img>
-				</div>
-				<div id="jugador-del-izq" class="jugador">
-					<img></img>
-				</div>
+			<div id="jugador-def-der" class="jugador">
+				<img id="player-2"></img>
+			</div>
+			<div id="jugador-def-izq" class="jugador">
+				<img id="player-3"></img>
+			</div>
+			<div id="jugador-del-der" class="jugador">
+				<img id="player-4"></img>
+			</div>
+			<div id="jugador-del-izq" class="jugador">
+				<img id="player-5"></img>
 			</div>
 		</div>
 		<div id="divRight" class="background">
-			<div class="left">
-				<div id="jugador-def-der" class="jugador">
-					<img></img>
-				</div>
-				<div id="jugador-def-izq" class="jugador">
-					<img></img>
-				</div>
-				<div id="jugador-arquero" class="jugador">
-					<img></img>
-				</div>
+			<div id="jugador-arquero" class="jugador">
+				<img id="player-1"></img>
 			</div>
-			<div class="right">
-				<div id="jugador-del-der" class="jugador">
-					<img></img>
-				</div>
-				<div id="jugador-del-izq" class="jugador">
-					<img></img>
-				</div>
+			<div id="jugador-def-der" class="jugador">
+				<img id="player-2"></img>
+			</div>
+			<div id="jugador-def-izq" class="jugador">
+				<img id="player-3"></img>
+			</div>
+			<div id="jugador-del-der" class="jugador">
+				<img id="player-4"></img>
+			</div>
+			<div id="jugador-del-izq" class="jugador">
+				<img id="player-5"></img>
 			</div>
 		</div>
-		<!--</div>-->
 		<div id="popupNew">
 			<div id="closePopup">X</div>
 			<form action="#" id="formAdd">
@@ -92,11 +81,11 @@
 		$(document).ready(function(){	
 			var playerId = 10;			
 			
-			//Silvana K. seteo las imagenes en posicionees libres.
+			//seteo las imagenes en posicionees libres.
 			$("#divLeft div img").attr('src', './CSS/images/flecha_azul.png');
 			$("#divRight div img").attr('src', './CSS/images/flecha_roja.png');
 			
-			//Silvana K. Para cada elemento Jugador le asigno el data.
+			//Para cada elemento Jugador le asigno el data.
 			$.each($(".jugador").find("img"), function(){
 				var objData = {	"mouseover": true, 
 								"libre": true, 
@@ -206,7 +195,7 @@
 				return false;
 			})
 								
-			$("#divLeft").bind("click", function(){
+			/*$("#divLeft").bind("click", function(){
 				//validate is player empty
 				if (playerId == 0)
 				{
@@ -216,22 +205,31 @@
 				}
 				else ShowPopupDelete();
 			});
+			*/
 			
-			//Silvana K. Animacion 
+			//Animacion 
 			$(".jugador").bind("mouseenter", function(){
 				//obtengo el objeto sobre el cual estoy haciendo el hover.
 				var child = $(this).find("img");
 					
-				//Modifico la propiedad del mouseover.
-				child.data("mouseover", true);
-					
-				//Inicio la animacion.
-				animatePlayer(child);
+				//Disparo la animacion solo cuando la posicion esta libre.
+				if (isFree(child))
+				{
+					//Modifico la propiedad del mouseover.
+					child.data("mouseover", true);
+
+					//Inicio la animacion.
+					animatePlayer(child);
+				}
 			});
 								
 			$(".jugador").bind("mouseout" , function(){
 				//Modifico la propiedad del mouseover.
 				$(this).find("img").data("mouseover", false);
+			});
+			
+			$(".jugador").bind("click", function(){
+				changeStateImage($(this).find("img"));
 			});
 				
 			//Hide popup and reset form.

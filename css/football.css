@@ -1,4 +1,7 @@
 #mapa{
 	height: 250px;
 	width: 250px;
+	float: right;
+	top: 18%;
+	left: 20%;
 }
