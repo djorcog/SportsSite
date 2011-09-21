@@ -199,7 +199,7 @@
 
 			$(".jugador").bind("click", function(){			
 				//validate is player empty
-				if (IsFree($(this).find("img")))
+				if (isFree($(this).find("img")))
 				{
 					ShowPopupNew();
 					//Luego de completar el submit debo modificar la imagen.
@@ -214,7 +214,7 @@
 				var child = $(this).find("img");
 					
 				//Disparo la animacion solo cuando la posicion esta libre.
-				if (IsFree(child))
+				if (isFree(child))
 				{
 					//Modifico la propiedad del mouseover.
 					child.data("mouseover", true);
