@@ -1,4 +1,4 @@
-#popup, #popupDelete { 
+#popupNew, #popupDelete { 
    z-index:2; 
    position:absolute; 
    border: 1px solid #333333; 

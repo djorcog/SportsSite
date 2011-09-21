@@ -10,10 +10,8 @@
 		<link type="text/css" href="css/style.css" rel="stylesheet" />				
 	</head>
 
-	<body>	
-		<!--<div id="Content">-->
-			<title>HOLAAAAA</title>
-			<div id="divLeft" class="background">
+	<body>					
+		<div id="divLeft" class="background">
 			<div class="right">
 				<div id="jugador-arquero" class="jugador">
 					<img id="player1"></img>
@@ -88,9 +86,11 @@
 	<script type="text/javascript" src="js/dialog.js"></script>-->
 	
 	<script type="text/javascript">		
-		codeAddress('11 de abril 350, Bahía Blanca, Argentina', 'Azia Futbol, 11 de abril 350');
-		$(document).ready(function(){	
-			var playerId = 10;			
+		//Set map.
+		codeAddress('11 de abril 350, Bahía Blanca, Argentina', 'Azia Futbol, 11 de abril 350');				
+		
+		$(document).ready(function(){				
+			var playerId;			
 			
 			//Silvana K. seteo las imagenes en posicionees libres.
 			$("#divLeft div img").attr('src', './CSS/images/flecha_azul.png');
@@ -157,7 +157,7 @@
 											error: function(){
 												alert("Error estamos al horno!!!");
 											}
-										})
+										}),
 										validate.resetForm();
 										Hide();
 										return false;						
@@ -206,9 +206,9 @@
 				return false;
 			})
 								
-			$("#divLeft").bind("click", function(){
+			$(".jugador").bind("click", function(){
 				//validate is player empty
-				if (playerId == 0)
+				if (IsFree($(this).find("img")))
 				{
 					ShowPopupNew();
 					//Luego de completar el submit debo modificar la imagen.
@@ -217,7 +217,7 @@
 				else ShowPopupDelete();
 			});
 			
-			//Silvana K. Animacion 
+			//Animate 
 			$(".jugador").bind("mouseenter", function(){
 				//obtengo el objeto sobre el cual estoy haciendo el hover.
 				var child = $(this).find("img");

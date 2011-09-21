@@ -1,5 +1,5 @@
 //Verifico si la posicion esta libre u ocupado.
-function isFree(that)
+function IsFree(that)
 {
 	return $(that).data("libre");
 };
